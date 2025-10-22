@@ -1,0 +1,102 @@
+:root {
+    --bege: #FFEBE7;
+    --azul: #7F95D1;
+    --rosa: #FF82A9;
+    --melon: #FFC0BE;
+}
+
+
+body{
+    background-color: black;
+    color: var(--bege);
+    display: flex;
+    justify-content: center;
+}
+#container{
+    display: flex;
+    flex-direction: column;
+}
+#titulo{
+    margin: auto;
+    
+    img{
+
+        z-index: -1;
+        position: absolute;
+        transform: translateY(-60%) scaleY(40%);
+    }
+    h1{
+        width: fit-content;;
+        animation: wobble 1s ease-in-out infinite alternate;
+        padding-top: 2rem;
+    }
+
+    padding-bottom: 3.5rem;
+    font-size: larger;
+}
+
+@keyframes wobble {
+  0% { transform: translate(0px, 0px) rotate(0deg); }
+  15% { transform: translate(-2px, -1px) rotate(-1deg); }
+  30% { transform: translate(1px, 2px) rotate(1deg); }
+  45% { transform: translate(-3px, 0px) rotate(-2deg); }
+  60% { transform: translate(2px, -2px) rotate(1deg); }
+  75% { transform: translate(-1px, 1px) rotate(-1deg); }
+  100% { transform: translate(0px, 0px) rotate(0deg); }
+}
+
+@keyframes spin {
+  0% {
+    transform: translateY(-60%) rotate(0deg) scaleY(35%);
+  }
+  4% {
+    transform: translateY(-60%)  rotate(10deg) scaleY(40%);
+  }
+  90% {
+    transform: translateY(-60%)  rotate(350deg) scaleY(45%);
+  }
+  100% {
+    transform: translateY(-60%)  rotate(360deg) scaleY(40%);
+  }
+}
+
+.spinner{
+    animation: spin 0.4s linear; 
+}
+
+#carta{
+    min-height: 50vh;
+    max-width: 800px;
+    width: 800px;
+    font-size: larger;
+    margin: 1rem 0rem;
+    padding: 1rem;
+    border: dotted #7F95D1;
+    border-radius: 5px;
+}
+
+#alternativas{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    button{
+        font-size: larger;
+        background-color: var(--rosa);
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        cursor: pointer;
+        animation: wobble 4s ease-in-out infinite alternate;
+
+    }
+    button:hover{
+        animation: none;
+        background-color: var(--azul);
+        color: white;
+        animation: wobble 1s ease-in infinite alternate;
+
+    }
+}
