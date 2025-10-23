@@ -1,8 +1,0 @@
-Saving	config file	C:\Users\sarae\falsooufeiki\imagens\snes9x-1.60-win32-x64\snes9x.conf
-Saving	config file	C:\Users\sarae\falsooufeiki\imagens\snes9x-1.60-win32-x64\snes9x.conf
-Saving	config file	C:\Users\sarae\falsooufeiki\imagens\snes9x-1.60-win32-x64\snes9x.conf
-No ROM file header found.
-Map_HiROMMap
-"SUPER BOMBERMAN 4" [checksum ok] HiROM, 16Mbits, ROM, NTSC, SRAM:0Kbits, ID:A4BJ, CRC32:3BBAEB19
-Saving	config file	C:\Users\sarae\falsooufeiki\imagens\snes9x-1.60-win32-x64\snes9x.conf
-Saving	config file	C:\Users\sarae\falsooufeiki\imagens\snes9x-1.60-win32-x64\snes9x.conf

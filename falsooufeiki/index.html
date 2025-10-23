@@ -19,31 +19,21 @@
                 <div>
             </div>
 
-            <div id="jogo" style="display: ;">
+            <div id="jogo">
                 <div id="carta">
                     <h2>é real ou feiki que...</h2>
                     <p>abluble</p>
                 </div>
                 <div id="alternativas">
-                    <button onclick="verifica(true)">REAL</button>
-                    <button onclick="verifica(false)">FEIKI</button>
+                    <button id="real"">REAL</button>
+                    <button id="feiki">FEIKI</button>
                 </div>
             </div>
+            
+            <script src="./script.js" type="module">
+            </script>
         </div>
     </div>
 
-    <script>
-        // Trigger the animation on a click event
-        const issoroda = document.getElementById('rato');
-        
-        issoroda.addEventListener('click', () => {
-        });
-        let realoufake = true;
-        function verifica(chute){
-            if (chute == realoufake){
-                    issoroda.classList.toggle('spinner');
-            }
-        }
-    </script>
 </body>
 </html>

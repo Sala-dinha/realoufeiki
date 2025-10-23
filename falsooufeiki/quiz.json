@@ -1,0 +1,122 @@
+[
+  {
+    "tema": 1,
+    "texto": "É real ou fake que Bolsonaro já disse que é macho demais pra usar cinto de segurança?",
+    "real": false
+  },
+  {
+    "tema": 1,
+    "texto": "É real ou fake que Bolsonaro afirmou que nunca precisou de psicólogo porque tem um fuzil e fé?",
+    "real": true
+  },
+  {
+    "tema": 1,
+    "texto": "É real ou fake que Lula declarou que nunca mentiu, só adaptou a verdade ao contexto social?",
+    "real": false
+  },
+  {
+    "tema": 1,
+    "texto": "É real ou fake que Lula já disse que não tem diploma, mas tem doutorado em sobrevivência brasileira?",
+    "real": true
+  },
+  {
+    "tema": 1,
+    "texto": "É real ou fake que Alexandre de Moraes afirmou que raspa a cabeça pra não dar margem à desordem capilar?",
+    "real": false
+  },
+  {
+    "tema": 1,
+    "texto": "É real ou fake que Alexandre de Moraes já disse que sua careca é símbolo de ordem constitucional?",
+    "real": true
+  },
+  {
+    "tema": 1,
+    "texto": "É real ou fake que Donald Trump afirmou que é tão viril que poderia engravidar o mercado financeiro com um discurso?",
+    "real": false
+  },
+  {
+    "tema": 1,
+    "texto": "É real ou fake que Donald Trump já disse que herdou o talento dos negócios no DNA e o ego no cabelo?",
+    "real": true
+  },
+  {
+    "tema": 4,
+    "texto": "É real ou fake que Zé Felipe já esqueceu a letra da própria música durante um show e começou a cantar 'Parabéns pra Você'?",
+    "real": true
+  },
+  {
+    "tema": 4,
+    "texto": "É real ou fake que Neymar já levou um cartão amarelo por comemorar um gol fazendo dancinha do TikTok?",
+    "real": true
+  },
+  {
+    "tema": 4,
+    "texto": "É real ou fake que Vini Jr. já tentou patentear o passo do 'sambadinha' como movimento oficial da FIFA?",
+    "real": false
+  },
+  {
+    "tema": 4,
+    "texto": "É real ou fake que Virginia já fez publi de pasta de dente enquanto chorava no Instagram?",
+    "real": true
+  },
+  {
+    "tema": 4,
+    "texto": "É real ou fake que Zé Felipe já confundiu um microfone com um sorvete e tentou morder ao vivo?",
+    "real": false
+  },
+  {
+    "tema": 4,
+    "texto": "É real ou fake que Neymar já comprou uma mansão só para guardar seus tênis?",
+    "real": true
+  },
+  {
+    "tema": 1,
+    "texto": "É real ou fake que Bolsonaro disse que nunca teve cabelo ruim porque sempre usou cloroquina?",
+    "real": true
+  },
+  {
+    "tema": 1,
+    "texto": "É real ou fake que Bolsonaro afirmou que o Brasil devia importar ar limpo da Suécia em vez de preservar florestas?",
+    "real": true
+  },
+  {
+    "tema": 1,
+    "texto": "É real ou fake que Bolsonaro já declarou que só não virou astronauta porque o capacete atrapalhava a mira?",
+    "real": false
+  },
+  {
+    "tema": 1,
+    "texto": "É real ou fake que Lula disse que não existe fome no Brasil porque todo mundo tem celular?",
+    "real": false
+  },
+  {
+    "tema": 1,
+    "texto": "É real ou fake que Lula já afirmou que o brasileiro é tão criativo que inventa até jeito novo de sofrer?",
+    "real": true
+  },
+  {
+    "tema": 1,
+    "texto": "É real ou fake que Alexandre de Moraes chamou uma tentativa de golpe de 'desinteligência natural'?",
+    "real": true
+  },
+  {
+    "tema": 1,
+    "texto": "É real ou fake que Alexandre de Moraes já disse que quem critica o STF vive em Nárnia jurídica?",
+    "real": true
+  },
+  {
+    "tema": 1,
+    "texto": "É real ou fake que Alexandre de Moraes tem uma tatuagem de Constituição nas costas?",
+    "real": false
+  },
+  {
+    "tema": 1,
+    "texto": "É real ou fake que Donald Trump publicou um vídeo de IA onde aparece jogando fezes em manifestantes?",
+    "real": true
+  },
+  {
+    "tema": 1,
+    "texto": "É real ou fake que Donald Trump já disse que se fosse uma árvore, seria uma sequoia porque ninguém derruba ele?",
+    "real": false
+  }
+]
