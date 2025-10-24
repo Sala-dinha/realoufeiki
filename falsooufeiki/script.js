@@ -39,7 +39,7 @@ function mostra_carta(carta){
 function verifica(chute){
     if (carta_atual.real == chute){
         rato_firula();
-        jogadores[jogador_atual].score++;
+        jogadores[jogador_atual].score++;   
     }
     else {
         

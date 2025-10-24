@@ -12,6 +12,24 @@ body{
     display: flex;
     justify-content: center;
 }
+
+@keyframes virar{
+  0%   {background-color: var(--melon); color: var(--melon); border: solid 4mm var(--rosa); scale: 0.3; transform: rotateY(180deg) rotateX(180deg); top: 7rem; left: -4rem;}
+  27%  {background-color: var(--melon); color: var(--melon); border: solid 4mm var(--rosa);}
+  28%  {background-color: black; color: var(--bege); border: dotted 1mm var(--azul);}
+  100% {scale: 1; transform: rotateY(0deg) rotateX(0deg); top: 0; left: 0;}
+}
+.roda{
+  height: 60px;
+  width: 40px;
+  border: solid 2px var(--rosa);
+  position: relative;
+  box-sizing: border-box;
+  /* background-color: var(--melon); */
+  animation-name: virar;
+  animation-duration: 4s;
+  animation-fill-mode: forwards;
+}
 #container{
     display: flex;
     flex-direction: column;
