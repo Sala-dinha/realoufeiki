@@ -1,0 +1,37 @@
+[
+    { "character": "raluca", "imagem": "./imagens/raluca.png", "tema": 0 },
+    { "character": "diggo", "imagem": "./imagens/diggo.png", "tema": 0 },
+    { "character": "jean l", "imagem": "./imagens/jean l.png", "tema": 0 },
+    { "character": "yanni", "imagem": "./imagens/yanni.png", "tema": 0 },
+  
+    { "character": "bolsonaro", "imagem": "./imagens/bolsonaro.png", "tema": 1 },
+    { "character": "lula", "imagem": "./imagens/lula.png", "tema": 1 },
+    { "character": "trump", "imagem": "./imagens/trump.png", "tema": 1 },
+    { "character": "alexandre de moraes", "imagem": "./imagens/alexandre de moraes.png", "tema": 1 },
+  
+    { "character": "monark", "imagem": "./imagens/monark.png", "tema": 2 },
+    { "character": "igor3k", "imagem": "./imagens/igor3k.png", "tema": 2 },
+    { "character": "kim kataguiri", "imagem": "./imagens/kim kataguiri.png", "tema": 2 },
+    { "character": "podpah", "imagem": "./imagens/podpah.png", "tema": 2 },
+  
+    { "character": "olavo de caralho", "imagem": "./imagens/olavo de caralho.png", "tema": 3 },
+    { "character": "paulo kogos", "imagem": "./imagens/paulo kogos.png", "tema": 3 },
+    { "character": "nando moura", "imagem": "./imagens/nando moura.png", "tema": 3 },
+    { "character": "super xandao", "imagem": "./imagens/super xandao.png", "tema": 3 },
+  
+    { "character": "virginia fonseca", "imagem": "./imagens/virginia fonseca.png", "tema": 4 },
+    { "character": "ze filipe", "imagem": "./imagens/ze filipe.png", "tema": 4 },
+    { "character": "vini jr", "imagem": "./imagens/vini jr.png", "tema": 4 },
+    { "character": "neymar", "imagem": "./imagens/neymar.png", "tema": 4 },
+  
+    { "character": "davy jones", "imagem": "./imagens/davy jones.png", "tema": 5 },
+    { "character": "gameplayrj", "imagem": "./imagens/gameplayrj.png", "tema": 5 },
+    { "character": "tutorial do spray", "imagem": "./imagens/tutorial do spray.gif", "tema": 5 },
+    { "character": "davy jones do velho testamento", "imagem": "./imagens/davy jones do velho testamento.png", "tema": 5 },
+  
+    { "character": "alan", "imagem": "./imagens/alan.png", "tema": 6 },
+    { "character": "edge", "imagem": "./imagens/edge.png", "tema": 6 },
+    { "character": "abelha do bee movie", "imagem": "./imagens/abelha do bee movie.png", "tema": 6 },
+    { "character": "nextage", "imagem": "./imagens/nextage.png", "tema": 6 }
+  ]
+  
