@@ -226,7 +226,7 @@ function cursores() {
 /* ======= Startup / wiring ======= */
 function init() {
     // wire buttons
-    trocaTela($tabuleiro);
+    trocaTela($entrada);
     if ($feiki) $feiki.addEventListener('click', () => verifica(false));
     if ($real) $real.addEventListener('click', () => verifica(true));
     if ($confirmaPersonagens) $confirmaPersonagens.addEventListener('click', () => confirmaPersonagens());
