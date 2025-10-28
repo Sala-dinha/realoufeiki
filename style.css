@@ -1,0 +1,205 @@
+:root {
+    --bege: #FFEBE7;
+    --azul: #7F95D1;
+    --rosa: #FF82A9;
+    --melon: #FFC0BE;
+}
+
+.seletor{
+  z-index: 2;
+  position: absolute;
+  height: 4rem;
+  aspect-ratio: 1;
+  box-sizing: border-box;
+  border-radius: 50%;
+  border: 20px solid white;
+}
+.player1{
+  background-color: red;
+}
+.player2{
+  background-color: blue;
+}
+.player3{
+  background-color: var(--rosa);
+}
+.player4{
+  background-color: green;
+}
+.cursor{
+  margin: 1px;
+  display: inline-block;
+  aspect-ratio: 1;
+  border: 2px solid white;
+  width: 100px;
+  position: relative; /* make absolute children position inside this element */
+}
+#tela_entrada{
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50vh;
+}
+
+#grade{
+  margin: auto;
+  display: grid;
+  gap: 1rem 1rem;
+}
+
+
+#tela_selecao .esquerda{
+  grid-column: 1;
+}
+#tela_selecao .centro{
+  grid-column: 2;
+}
+#tela_selecao .direita{
+  grid-column: 3;
+}
+
+#tela_selecao .alto{
+  grid-row: 1;
+}
+#tela_selecao .meio{
+  grid-row: 2;
+}
+#tela_selecao .baixo{
+  grid-row: 3;
+}
+
+.personagem{
+  border: dotted rgba(255, 255, 255, 0.363) 2px;
+  max-width: 100px;
+  aspect-ratio: 1;
+}
+
+body{
+  margin: auto;
+  width: fit-content;
+  background-color: black;
+  color: var(--bege);
+  display: flex;
+  justify-content: center;
+}
+#container{
+    display: flex;
+    flex-direction: column;
+}
+#titulo{
+    margin: auto;
+    
+    img{
+        z-index: -1;
+        position: absolute;
+        transform: translateY(-60%) scaleY(40%);
+    }
+    h1{
+        width: fit-content;;
+        animation: wobble 1s ease-in-out infinite alternate;
+        padding-top: 2rem;
+    }
+
+    padding-bottom: 3.5rem;
+    font-size: larger;
+}
+
+@keyframes wobble {
+  0% { transform: translate(0px, 0px) rotate(0deg); }
+  15% { transform: translate(-2px, -1px) rotate(-1deg); }
+  30% { transform: translate(1px, 2px) rotate(1deg); }
+  45% { transform: translate(-3px, 0px) rotate(-2deg); }
+  60% { transform: translate(2px, -2px) rotate(1deg); }
+  75% { transform: translate(-1px, 1px) rotate(-1deg); }
+  100% { transform: translate(0px, 0px) rotate(0deg); }
+}
+
+@keyframes spin {
+  0% {
+    transform: translateY(-60%) rotate(0deg) scaleY(35%);
+  }
+  4% {
+    transform: translateY(-60%)  rotate(10deg) scaleY(40%);
+  }
+  90% {
+    transform: translateY(-60%)  rotate(350deg) scaleY(45%);
+  }
+  100% {
+    transform: translateY(-60%)  rotate(360deg) scaleY(40%);
+  }
+}
+
+#tela_entrada button{
+  font-size: larger;
+  background-color: var(--rosa);
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.spinner{
+    animation: spin 0.4s linear; 
+}
+
+#carta{
+    min-height: 50vh;
+    max-width: 800px;
+    width: 800px;
+    font-size: larger;
+    margin: 1rem 0rem;
+    padding: 1rem;
+    border: dotted #7F95D1;
+    border-radius: 5px;
+}
+
+#alternativas{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+@keyframes virar{
+  0%   {background-color: var(--melon); color: var(--melon); border: solid 4mm var(--rosa); scale: 0.3; transform: rotateY(180deg) rotateX(180deg); top: 7rem; left: -4rem;}
+  27%  {background-color: var(--melon); color: var(--melon); border: solid 4mm var(--rosa);}
+  28%  {background-color: black; color: var(--bege); border: dotted 1mm var(--azul);}
+  100% {scale: 1; transform: rotateY(0deg) rotateX(0deg); top: 0; left: 0;}
+}
+.roda{
+  height: 60px;
+  width: 40px;
+  border: solid 2px var(--rosa);
+  position: relative;
+  box-sizing: border-box;
+  /* background-color: var(--melon); */
+  animation-name: virar;
+  animation-duration: 4s;
+  animation-fill-mode: forwards;
+}
+#alternativas button{
+  font-size: larger;
+  background-color: var(--rosa);
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  cursor: pointer;
+  animation: wobble 4s ease-in-out infinite alternate;
+};
+#alternativas button:hover{
+  animation: none;
+  background-color: var(--azul);
+  color: white;
+  animation: wobble 1s ease-in infinite alternate;
+}
+
+#tabuleiro{
+  aspect-ratio: calc(16/9);
+  height: 60vh;
+}

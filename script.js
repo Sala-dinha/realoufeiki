@@ -46,8 +46,8 @@ function comecarJogo(){
     console.log('Tabuleiro gerado:', tabuleiro);
     jogadores.forEach((j, index) => {if (j.ativo) jogadores_ativos.push(index);});
     jogador_atual = jogadores_ativos[0];
-    trocaTela($jogo);
-    turno();
+    trocaTela($tabuleiro);
+    // turno();
 }
 
 function rodarDado(){
@@ -226,7 +226,7 @@ function cursores() {
 /* ======= Startup / wiring ======= */
 function init() {
     // wire buttons
-    trocaTela($entrada);
+    trocaTela($tabuleiro);
     if ($feiki) $feiki.addEventListener('click', () => verifica(false));
     if ($real) $real.addEventListener('click', () => verifica(true));
     if ($confirmaPersonagens) $confirmaPersonagens.addEventListener('click', () => confirmaPersonagens());
