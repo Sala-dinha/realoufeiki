@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 
-import { MTLLoader } from 'three/addons/loaders/MTLLoader.js';
-import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
+// import { MTLLoader } from 'three/addons/loaders/MTLLoader.js';
+// import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
 
 // Scene setup
 const scene = new THREE.Scene();
@@ -40,26 +40,26 @@ function animate() {
 
 
 // instantiate a loader
-const objLoader = new OBJLoader().setPath('./modelos/');
-const mtlLoader = new MTLLoader().setPath('./modelos/');
-const ob = []
-mtlLoader.load('Untitled.mtl', (materials) => {
-    materials.preload()
-    objLoader.setMaterials(materials); // Apply the loaded materials
-    objLoader.load('Untitled.obj', (object) => {
-        // The object is now loaded with its materials applied
-        ob.push(object);
-        scene.add(object);
-    },
-    // Optional: onProgress callback
-    (xhr) => {
-        console.log((xhr.loaded / xhr.total * 100) + '% loaded');
-    },
-    // Optional: onError callback
-    (error) => {
-        console.log('An error happened', error);
-    });
-})
+// const objLoader = new OBJLoader().setPath('./modelos/');
+// const mtlLoader = new MTLLoader().setPath('./modelos/');
+// const ob = []
+// mtlLoader.load('Untitled.mtl', (materials) => {
+//     materials.preload()
+//     objLoader.setMaterials(materials); // Apply the loaded materials
+//     objLoader.load('Untitled.obj', (object) => {
+//         // The object is now loaded with its materials applied
+//         ob.push(object);
+//         scene.add(object);
+//     },
+//     // Optional: onProgress callback
+//     (xhr) => {
+//         console.log((xhr.loaded / xhr.total * 100) + '% loaded');
+//     },
+//     // Optional: onError callback
+//     (error) => {
+//         console.log('An error happened', error);
+//     });
+// })
 
 
 
@@ -109,7 +109,6 @@ let tracker = {
     tick_list: [],
     timeout_list: []
 };
-tracker.registerTimeout(() => {ob[0].position.x += 1}, 2000)
 
 function posicaoTabuleiro(n, l, tamanhoCasa = 1, gapcasa = 0){
     // y = quantas linhas foram percorridas
@@ -203,6 +202,6 @@ window.addEventListener('keydown', (event) => {
     camera.lookAt(cube.position);
 });
 window.addEventListener('click', (e) =>{
-    console.log('cu:' + cube.position.toArray())
-    console.log('ca:' + camera.position.toArray())
+    // console.log('cu:' + cube.position.toArray())
+    // console.log('ca:' + camera.position.toArray())
 })

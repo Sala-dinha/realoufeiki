@@ -1,8 +1,147 @@
 :root {
     --bege: #FFEBE7;
     --azul: #7F95D1;
+    --azul2: #4b35b9;
     --rosa: #FF82A9;
     --melon: #FFC0BE;
+
+}
+body, html {
+  height: 100vh;
+  overflow: hidden;
+}
+
+#status_players{
+  background-color: black;
+  border: dashed 2px var(--azul2);
+  position: absolute;
+  height: 24rem;
+  width: 19rem;
+  left: 3rem;
+  top: 5rem;
+}
+.levantando{
+  animation: levantarcopo 2s;
+}
+.tremendo{
+  animation: wobble 2s;
+}
+
+.player{
+  display: flex;
+  flex-direction: row;
+  padding: .8rem;
+  align-items:start;
+}
+
+.player img{
+  height: 4rem;
+  width: 4rem;
+}
+.player p{
+  text-align: right;
+  font-size: small;
+  vertical-align: text-top;
+  margin-top: .1rem;
+  margin-bottom: .7rem;
+}
+
+.coluna{
+  display: flex;
+  flex-direction: column;
+  flex-basis: 100%;
+  padding-left: .3rem;
+}
+
+.barra{
+  border: 2px solid wheat;
+  border-radius: 2rem;
+  height: 0.6rem;
+  p{
+    position:relative;
+    bottom: -1rem;
+  }
+}
+
+#copo{
+  right: 4rem;
+  bottom: 4rem;
+  position: absolute;
+  animation-fill-mode: forwards;
+}
+#copo:hover{
+  cursor: pointer;
+}
+
+#dado{
+  right: 4rem;
+  bottom: 5.5rem;
+  position: absolute;
+  z-index: -1;
+}
+
+#topo{
+  background-color: var(--melon);
+  height: 4rem;
+  width: 11.9rem;
+  bottom: -2rem;
+  left: 2.29rem;
+  border-radius: 50%;
+  position: relative;
+  border: #7F95D1 solid .3rem;
+  z-index: 3;
+}
+
+#corpo{
+  width: 17rem;
+  height: 15rem;
+  background-color: var(--melon);
+  clip-path: polygon(15% 0, 85% 0, 100% 100%, 0% 100%);
+  position: relative;
+  z-index: 2;
+}
+
+#baixo{
+  background-color: var(--melon);
+  height: 4rem;
+  width: 17rem;
+  top: -2rem;
+  right: .3rem;
+  border-radius: 50%;
+  position: relative;
+  border: #7F95D1 solid .3rem;
+  z-index: 1;
+
+}
+
+@keyframes levantarcopo{
+  0% {bottom: 4rem; }
+  100%{bottom: 23rem;}
+
+}
+
+#baralho{
+  background-color: #FFC0BE;
+  border: #FF82A9 solid .5rem;
+  height: 10rem;
+  width: 20rem;
+  position: absolute;
+  margin: auto;
+  justify-self: center;
+  bottom: -14rem;
+  animation-fill-mode: forwards;
+}
+#baralho:hover{
+  cursor: pointer;
+}
+
+.upando{
+  animation: up 4s;
+}
+
+@keyframes up{
+  0% {bottom: -14rem; }
+  100%{bottom: 18rem;}
 }
 
 .seletor{
@@ -88,15 +227,15 @@ body{
     flex-direction: column;
 }
 #titulo{
-    margin: auto;
-    
+    margin: 0;
+    align-self: center;
     img{
         z-index: -1;
         position: absolute;
         transform: translateY(-60%) scaleY(40%);
     }
     h1{
-        width: fit-content;;
+        width: fit-content;
         animation: wobble 1s ease-in-out infinite alternate;
         padding-top: 2rem;
     }
@@ -164,7 +303,7 @@ body{
 }
 
 @keyframes virar{
-  0%   {background-color: var(--melon); color: var(--melon); border: solid 4mm var(--rosa); scale: 0.3; transform: rotateY(180deg) rotateX(180deg); top: 7rem; left: -4rem;}
+  0%   {background-color: var(--melon); color: var(--melon); border: solid 4mm var(--rosa); scale: 0.3; transform: rotateY(180deg) rotateX(180deg); top: 7rem; left: 0rem;}
   27%  {background-color: var(--melon); color: var(--melon); border: solid 4mm var(--rosa);}
   28%  {background-color: black; color: var(--bege); border: dotted 1mm var(--azul);}
   100% {scale: 1; transform: rotateY(0deg) rotateX(0deg); top: 0; left: 0;}

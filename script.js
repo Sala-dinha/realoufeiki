@@ -3,6 +3,7 @@ import Personagens from './personagens.json' with {type: 'json'};
 
 /* ======= Constants & state ======= */
 const TEMAS = ['raluca', 'politica', 'podcasts', 'politiquetes', 'celebretes', 'davy jones', 'alanzoka'];
+const animacao = {}
 let carta_atual = {tema: '', texto: '', real: false};
 let jogadores = [
     {personagem: '', score: 0, ativo: false, posicao: 0},
@@ -14,6 +15,9 @@ let jogadores_ativos = [];
 let jogador_atual = 0;
 
 /* ======= DOM references (cached) ======= */
+const $baralho = document.querySelector('#baralho');
+const $copo = document.querySelector('#copo');
+const $dado = document.querySelector('#dado');
 const $iniciar_jogo = document.querySelector('#iniciar_jogo');
 const $feiki = document.querySelector('#feiki');
 const $real = document.querySelector('#real');
@@ -31,6 +35,8 @@ const $podio = document.getElementById('tela_podio');
 /* ======= Utility functions ======= */
 
 function trocaTela(telaDestino){
+    
+    $copo.classList.remove('levantando');
     if ($tela_atual) {
         $tela_atual.style.display = 'none';
     }
@@ -44,10 +50,31 @@ function comecarJogo(){
     // setup tabuleiro
     const tabuleiro = gerarTabuleiro(20);
     console.log('Tabuleiro gerado:', tabuleiro);
-    jogadores.forEach((j, index) => {if (j.ativo) jogadores_ativos.push(index);});
+    jogadores.forEach((j, index) => {if (j.ativo) {
+        jogadores_ativos.push(index);
+        criarPerfil(j);
+    }});
     jogador_atual = jogadores_ativos[0];
+    import('./tabuleiro.js')
+
     trocaTela($tabuleiro);
     // turno();
+}
+
+function criarPerfil(jogador){
+    const $statusPlayers = document.querySelector('#status_players');
+    const personagem = jogador.personagem;
+    const imagem = Personagens.find((p) => p.character == personagem).imagem;
+    $statusPlayers.innerHTML +=
+                    `<div class = "player">
+                        <img src="${imagem}"/>
+                        <div class="coluna">
+                            <p>${personagem}</p>
+                            <div class="barra">
+                                <div class="progresso"><p>0%</p></div>
+                            </div>
+                        </div>
+                    </div>`
 }
 
 function rodarDado(){
@@ -81,6 +108,8 @@ function gerarTabuleiro(tamanho) {
     return Array.from({length: tamanho}, () => Math.ceil(Math.random() * (TEMAS.length -1)));
     // sem tema raluca porque é chato
 }
+
+
 
 function deck_pull() {
     // draw a random card from the deck and remove it
@@ -136,6 +165,17 @@ function proximoTurno(){
     jogador_atual = jogadores_ativos[(jogadores_ativos.indexOf(jogador_atual) + 1) % jogadores_ativos.length];
     trocaTela($tabuleiro);
     turno();
+}
+
+function clicarCopo() {
+    $copo.classList.add('tremendo');
+    setTimeout(() => $copo.classList.remove('tremendo'), 2000);
+    $copo.classList.remove('levantando');
+    setTimeout(() => $copo.classList.add('levantando'), 2000);
+    // setTimeout(() => $baralho.classList.add('upando'), 4000);
+    let dado = rodarDado()
+    $dado.setAttribute('src', `imagens/dado${dado}.png`)
+    
 }
 
 function rato_firula() {
@@ -226,11 +266,14 @@ function cursores() {
 /* ======= Startup / wiring ======= */
 function init() {
     // wire buttons
+
     trocaTela($entrada);
     if ($feiki) $feiki.addEventListener('click', () => verifica(false));
     if ($real) $real.addEventListener('click', () => verifica(true));
     if ($confirmaPersonagens) $confirmaPersonagens.addEventListener('click', () => confirmaPersonagens());
     if ($iniciar_jogo) $iniciar_jogo.addEventListener('click', () => trocaTela($selecao));
+    if ($copo) $copo.addEventListener('click', () => clicarCopo());
+    if ($baralho) $baralho.addEventListener('click', () => trocaTela($jogo));
     // initial card
     carta_atual = deck_pull();
     mostra_carta(carta_atual);
@@ -241,3 +284,4 @@ function init() {
 
 // start the app
 init();
+

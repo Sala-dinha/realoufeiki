@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Real ou Fake</title>
     <link rel="stylesheet" href="./style.css">
+
     <script type="importmap">
     {
         "imports": {
@@ -90,9 +91,19 @@
             </div>
 
             </div>
-            <div id="tela_tabuleiro" style="display: none;">
-                <canvas id="tabuleiro"><div id="status_players">
-                </div></canvas>
+            <div id="tela_tabuleiro" style="display: none;" class="sumindo">
+                <div id="status_players"></div>
+                <canvas id="tabuleiro">
+                    
+                </canvas>
+                <div id="copo">
+                    <div id="topo"></div>
+                    <div id="corpo"></div>
+                    <div id="baixo">
+                    </div>
+                </div>
+                <img id="dado"src="imagens/dado1.png">
+                <div id="baralho"></div>
             </div>
             <div id="tela_jogo" style="display: none;">
                 <div id="carta" class="roda">
@@ -111,7 +122,6 @@
             <script src="./script.js" type="module">
                 
             </script>
-            <script src="./tabuleiro.js" type="module"></script>
         </div>
     </div>
     
