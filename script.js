@@ -46,6 +46,7 @@ function comecarJogo(){
     console.log('Tabuleiro gerado:', tabuleiro);
     jogadores.forEach((j, index) => {if (j.ativo) jogadores_ativos.push(index);});
     jogador_atual = jogadores_ativos[0];
+    import('./tabuleiro.js');
     trocaTela($tabuleiro);
     // turno();
 }
