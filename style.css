@@ -6,6 +6,10 @@
     --melon: #FFC0BE;
 
 }
+.turno{
+  background-color: rgba(160, 160, 160, 0.185);
+}
+
 body, html {
   height: 100vh;
   overflow: hidden;
@@ -35,6 +39,8 @@ body, html {
 }
 
 .player img{
+  aspect-ratio: 1;
+  border: 3px solid;
   height: 4rem;
   width: 4rem;
 }
@@ -57,10 +63,19 @@ body, html {
   border: 2px solid wheat;
   border-radius: 2rem;
   height: 0.6rem;
-  p{
-    position:relative;
-    bottom: -1rem;
-  }
+}
+
+.progresso{
+  background-color: wheat;
+  height: 100%;
+  position: relative;
+  top: -2px;
+  width: 0%;
+}
+
+.barra p{
+  position:relative;
+  bottom: -1rem;
 }
 
 #copo{
@@ -74,8 +89,8 @@ body, html {
 }
 
 #dado{
-  right: 4rem;
-  bottom: 5.5rem;
+  right: 6rem;
+  bottom: 6rem;
   position: absolute;
   z-index: -1;
 }
@@ -125,9 +140,10 @@ body, html {
   border: #FF82A9 solid .5rem;
   height: 10rem;
   width: 20rem;
-  position: absolute;
   margin: auto;
-  justify-self: center;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
   bottom: -14rem;
   animation-fill-mode: forwards;
 }
@@ -140,8 +156,17 @@ body, html {
 }
 
 @keyframes up{
-  0% {bottom: -14rem; }
-  100%{bottom: 18rem;}
+  0% {top: 100vh; }
+  100%{top: 15rem;}
+}
+
+@keyframes surgir {
+  0%{
+    filter: opacity(0%);
+  }
+  100%{
+    filter: opacity(100%);
+  }
 }
 
 .seletor{
@@ -286,6 +311,7 @@ body{
 }
 
 #carta{
+    z-index: 10;
     min-height: 50vh;
     max-width: 800px;
     width: 800px;
@@ -303,16 +329,35 @@ body{
 }
 
 @keyframes virar{
-  0%   {background-color: var(--melon); color: var(--melon); border: solid 4mm var(--rosa); scale: 0.3; transform: rotateY(180deg) rotateX(180deg); top: 7rem; left: 0rem;}
-  27%  {background-color: var(--melon); color: var(--melon); border: solid 4mm var(--rosa);}
-  28%  {background-color: black; color: var(--bege); border: dotted 1mm var(--azul);}
-  100% {scale: 1; transform: rotateY(0deg) rotateX(0deg); top: 0; left: 0;}
+  0%   {
+    background-color: var(--melon);
+    color: var(--melon); border: solid 4mm var(--rosa);
+    scale: 0.3; transform: rotateY(180deg) rotateX(180deg);
+    top: 15rem;
+  }
+  27%  {
+    background-color: var(--melon);
+    color: var(--melon);
+    border: solid 4mm var(--rosa);
+  }
+  28%  {
+    background-color: black;
+    color: var(--bege);
+    border: dotted 1mm var(--azul);}
+  100% {
+    scale: 1;
+    transform: rotateY(0deg) rotateX(0deg);
+    top: 0rem
+    }
 }
 .roda{
+  left: 50%;
+  translate: -50%;
   height: 60px;
   width: 40px;
   border: solid 2px var(--rosa);
   position: relative;
+
   box-sizing: border-box;
   /* background-color: var(--melon); */
   animation-name: virar;
@@ -331,6 +376,8 @@ body{
   cursor: pointer;
   animation: wobble 4s ease-in-out infinite alternate;
 };
+
+
 #alternativas button:hover{
   animation: none;
   background-color: var(--azul);

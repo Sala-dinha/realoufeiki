@@ -1,28 +1,45 @@
 import deck from './quiz.json' with {type: 'json'};
 import Personagens from './personagens.json' with {type: 'json'};
+import * as tab3d from './tabuleiro.js'
 
 /* ======= Constants & state ======= */
-const TEMAS = ['raluca', 'politica', 'podcasts', 'politiquetes', 'celebretes', 'davy jones', 'alanzoka'];
+const TEMAS = [
+    {tema: 'politica',      cor:0x0000ff, imagem: ''},
+    {tema: 'podcasts',      cor:0x00ffff, imagem: ''},
+    {tema: 'politiquetes',  cor:0xff00ff, imagem: ''},
+    {tema: 'celebretes',    cor:0xffff00, imagem: ''},
+    {tema: 'davy jones',    cor:0xffffff, imagem: ''},
+    {tema: 'alanzoka',      cor:0xff0000, imagem: ''}
+];
+
+let perfis = ['','','',''];
 const animacao = {}
 let carta_atual = {tema: '', texto: '', real: false};
 let jogadores = [
-    {personagem: '', score: 0, ativo: false, posicao: 0},
-    {personagem: '', score: 0, ativo: false, posicao: 0},
-    {personagem: '', score: 0, ativo: false, posicao: 0},
-    {personagem: '', score: 0, ativo: false, posicao: 0}
+    {personagem: '', score: 0, ativo: false, posicao: 0, indice: 0, cor: '#FF0000'},
+    {personagem: '', score: 0, ativo: false, posicao: 0, indice: 1, cor: '#0000FF'},
+    {personagem: '', score: 0, ativo: false, posicao: 0, indice: 2, cor: '#FF82A9'},
+    {personagem: '', score: 0, ativo: false, posicao: 0, indice: 3, cor: '#FFFF00'}
 ];
 let jogadores_ativos = [];
 let jogador_atual = 0;
+const tamanhoTabuleiro = 10;
+const tabuleiro = gerarTabuleiro(tamanhoTabuleiro);
+
+
 
 /* ======= DOM references (cached) ======= */
 const $baralho = document.querySelector('#baralho');
+let $barras = [];
 const $copo = document.querySelector('#copo');
 const $dado = document.querySelector('#dado');
 const $iniciar_jogo = document.querySelector('#iniciar_jogo');
 const $feiki = document.querySelector('#feiki');
-const $real = document.querySelector('#real');
+const $carta = document.querySelector('#carta');
 const $cartaTexto = document.querySelector('#carta p');
 const $confirmaPersonagens = document.querySelector('#confirma_personagens');
+const $real = document.querySelector('#real');
+const $statusPlayers = document.querySelector('#status_players');
 
 // telas
 let $tela_atual = null;
@@ -47,34 +64,51 @@ function trocaTela(telaDestino){
 }
 
 function comecarJogo(){
-    // setup tabuleiro
-    const tabuleiro = gerarTabuleiro(20);
-    console.log('Tabuleiro gerado:', tabuleiro);
-    jogadores.forEach((j, index) => {if (j.ativo) {
-        jogadores_ativos.push(index);
-        criarPerfil(j);
-    }});
+    tab3d.init({
+        casas: tabuleiro,
+        temas: TEMAS,
+        players: jogadores
+    });
+    criarPerfis();
     jogador_atual = jogadores_ativos[0];
-    import('./tabuleiro.js')
-
+    
+    perfis[jogador_atual].classList.add('turno');
     trocaTela($tabuleiro);
-    // turno();
+    
 }
 
 function criarPerfil(jogador){
-    const $statusPlayers = document.querySelector('#status_players');
-    const personagem = jogador.personagem;
-    const imagem = Personagens.find((p) => p.character == personagem).imagem;
+    const imagem = Personagens.find((p) => p.character == jogador.personagem).imagem;
     $statusPlayers.innerHTML +=
-                    `<div class = "player">
-                        <img src="${imagem}"/>
+                    `<div class="player" player="${jogador.indice}">
+                        <img src="${imagem}" style="border-color: ${jogador.cor};"/>
                         <div class="coluna">
-                            <p>${personagem}</p>
+                            <p>${jogador.personagem}</p>
                             <div class="barra">
                                 <div class="progresso"><p>0%</p></div>
                             </div>
                         </div>
-                    </div>`
+                    </div>`;
+}
+function criarPerfis(){
+    jogadores.forEach((j, index) => {if (j.ativo) {
+        jogadores_ativos.push(index);
+        criarPerfil(j);
+    }});
+    $statusPlayers.childNodes.forEach((e) => {
+        let player = e.getAttribute('player')
+        perfis[player] = e;
+    })
+    $barras = document.querySelectorAll('.progresso')
+}
+
+function setTurno(num_player){
+    perfis[jogador_atual].classList.remove('turno')
+    jogador_atual = num_player;
+    perfis[num_player].classList.add('turno')
+}
+function getNextPlayer(){
+    return jogadores_ativos[(jogadores_ativos.indexOf(jogador_atual) + 1) % jogadores_ativos.length]
 }
 
 function rodarDado(){
@@ -105,11 +139,9 @@ function confirmaPersonagens(){
 }
 
 function gerarTabuleiro(tamanho) {
-    return Array.from({length: tamanho}, () => Math.ceil(Math.random() * (TEMAS.length -1)));
+    return Array.from({length: tamanho+1}, () => Math.ceil(Math.random() * (TEMAS.length -1)));
     // sem tema raluca porque é chato
 }
-
-
 
 function deck_pull() {
     // draw a random card from the deck and remove it
@@ -122,13 +154,11 @@ function deck_pull() {
 }
 
 function carta_tema(tema) {
-    // return a random card with the given tema and remove it from deck
     const cartas = deck.filter(c => c.tema === tema);
     if (!cartas.length) return null;
     const sel = cartas[Math.floor(Math.random() * cartas.length)];
-    // remove the selected card from original deck
-    const idx = deck.indexOf(sel);
-    if (idx !== -1) deck.splice(idx, 1);
+    deck.splice(deck.indexOf(sel), 1);
+
     return sel;
 }
 
@@ -136,47 +166,72 @@ function mostra_carta(carta) {
     if ($cartaTexto) $cartaTexto.innerHTML = carta?.texto ?? '';
 }
 
+function clicarCopo() {
+    $copo.removeEventListener('click', clicarCopo);
+    $copo.classList.add('tremendo');
+    $copo.classList.remove('levantando');
+    dado = rodarDado()
+    $dado.setAttribute('src', `imagens/dado${dado}.png`);
+    setTimeout(() => {
+        $copo.classList.remove('tremendo');
+        $copo.classList.add('levantando');
+    }, 2000);
+
+    setTimeout(() => {
+        $baralho.classList.add('upando');
+    }, 4000);
+
+    setTimeout(() => {
+        $baralho.addEventListener('click', quiz);
+    }, 6000);
+}
+
+let dado = 0
+let movimento = 0;
+function quiz(){
+    $copo.addEventListener('click', clicarCopo);
+    $baralho.removeEventListener('click', quiz);
+    $baralho.classList.remove('upando');
+    
+    const player = jogadores[jogador_atual];
+
+    movimento = Math.min(tabuleiro.length-1 - player.posicao, dado)
+    player.posicao += movimento;
+    trocaTela($jogo);
+    carta_atual = carta_tema(player.posicao);
+    carta_atual == null ? carta_atual = deck_pull() : 0;
+    mostra_carta(carta_atual);
+}
+
+function atualizarBarra(jogador) {
+    const barra = $barras[jogadores_ativos.indexOf(jogador)]
+    const p = jogadores[jogador]
+    const pctg = Math.round((p.posicao /  (tamanhoTabuleiro)) * 100) + '%';
+    barra.style.width =  pctg;
+    barra.innerHTML = `<p>${pctg}</p>`
+
+}
+
 function verifica(chute) {
+    const player = jogadores[jogador_atual];
     if (carta_atual.real === chute) {
         rato_firula();
-        jogadores[jogador_atual].score++;
-        console.log('Jogador ' + (jogador_atual + 1) + ' acertou! Pontos:', jogadores[jogador_atual].score);
+        player.score++;
     }
     else {
-        jogadores[jogador_atual].posicao -= valor;
+        player.posicao -= movimento;
     }
+    if (player.posicao == tabuleiro.length-1) console.log('you win!')
+    atualizarBarra(player.indice);
     proximoTurno();
-}
-let valor = 0
-function turno(){
-    let movimento = rodarDado();
-    jogadores[jogador_atual].posicao += movimento;
-
-    trocaTela($jogo);
-    console.log(jogadores[jogador_atual].posicao)
-    carta_atual = carta_tema(jogadores[jogador_atual].posicao);
-    valor = movimento;
-    mostra_carta(carta_atual);
-
-
 }
 
 function proximoTurno(){
-    jogador_atual = jogadores_ativos[(jogadores_ativos.indexOf(jogador_atual) + 1) % jogadores_ativos.length];
+    setTurno(getNextPlayer())
     trocaTela($tabuleiro);
-    turno();
 }
 
-function clicarCopo() {
-    $copo.classList.add('tremendo');
-    setTimeout(() => $copo.classList.remove('tremendo'), 2000);
-    $copo.classList.remove('levantando');
-    setTimeout(() => $copo.classList.add('levantando'), 2000);
-    // setTimeout(() => $baralho.classList.add('upando'), 4000);
-    let dado = rodarDado()
-    $dado.setAttribute('src', `imagens/dado${dado}.png`)
-    
-}
+
 
 function rato_firula() {
     const rato = document.getElementById('rato');
@@ -240,7 +295,6 @@ function cursores() {
                 if (target) {
                     // If dropped over a character, log it (or handle selection)
                     const personagem = target.getAttribute('character') || target.closest('[character]')?.getAttribute('character');
-                    // console.log('Player ' + elmnt.getAttribute('player') + ' selected:', personagem || target);
                     elmnt.setAttribute('character', personagem || '');
                     let info_personagem = Personagens.find(p => p.character === personagem) || null;
                     if (info_personagem) {
@@ -272,11 +326,13 @@ function init() {
     if ($real) $real.addEventListener('click', () => verifica(true));
     if ($confirmaPersonagens) $confirmaPersonagens.addEventListener('click', () => confirmaPersonagens());
     if ($iniciar_jogo) $iniciar_jogo.addEventListener('click', () => trocaTela($selecao));
-    if ($copo) $copo.addEventListener('click', () => clicarCopo());
-    if ($baralho) $baralho.addEventListener('click', () => trocaTela($jogo));
+    if ($copo) $copo.addEventListener('click', clicarCopo);
+
+    window.addEventListener('keydown', (e) => {
+        if (e.key == 'q')
+            console.log(jogadores);
+    })
     // initial card
-    carta_atual = deck_pull();
-    mostra_carta(carta_atual);
 
     // setup cursors
     cursores();
