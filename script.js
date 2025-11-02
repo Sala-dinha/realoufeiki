@@ -16,10 +16,10 @@ let perfis = ['','','',''];
 const animacao = {}
 let carta_atual = {tema: '', texto: '', real: false};
 let jogadores = [
-    {personagem: '', score: 0, ativo: false, posicao: 0, indice: 0, cor: '#FF0000'},
-    {personagem: '', score: 0, ativo: false, posicao: 0, indice: 1, cor: '#0000FF'},
-    {personagem: '', score: 0, ativo: false, posicao: 0, indice: 2, cor: '#FF82A9'},
-    {personagem: '', score: 0, ativo: false, posicao: 0, indice: 3, cor: '#FFFF00'}
+    {personagem: '', score: 0, ativo: false, posicao: 0, indice: 0, cor: '#FF0000', imagem: ''},
+    {personagem: '', score: 0, ativo: false, posicao: 0, indice: 1, cor: '#0000FF', imagem: ''},
+    {personagem: '', score: 0, ativo: false, posicao: 0, indice: 2, cor: '#FF82A9', imagem: ''},
+    {personagem: '', score: 0, ativo: false, posicao: 0, indice: 3, cor: '#FFFF00', imagem: ''}
 ];
 let jogadores_ativos = [];
 let jogador_atual = 0;
@@ -125,6 +125,7 @@ function confirmaPersonagens(){
         jogadores[index].personagem = personagem;
         if (personagem) {
             jogadores[index].ativo = true;
+            jogadores[index].imagem = Personagens.find(p => p.character == personagem).imagem
         }
         else {
             jogadores[index].ativo = false;
