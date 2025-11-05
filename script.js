@@ -63,8 +63,8 @@ function trocaTela(telaDestino){
     }
 }
 
-function comecarJogo(){
-    tab3d.init({
+async function comecarJogo(){
+    await tab3d.init({
         casas: tabuleiro,
         temas: TEMAS,
         players: jogadores
@@ -118,7 +118,7 @@ function rodarDado(){
     return resultado;
 }
 
-function confirmaPersonagens(){
+async function confirmaPersonagens(){
     const cursores = document.querySelectorAll('.seletor');
     cursores.forEach((seletor, index) => {
         const personagem = seletor.getAttribute('character');
@@ -136,7 +136,7 @@ function confirmaPersonagens(){
         alert('Selecione pelo menos um personagem para jogar!');
         return;
     }
-    comecarJogo();
+    await comecarJogo();
 }
 
 function gerarTabuleiro(tamanho) {
@@ -167,11 +167,19 @@ function mostra_carta(carta) {
     if ($cartaTexto) $cartaTexto.innerHTML = carta?.texto ?? '';
 }
 
+let dado = 0
+let movimento = 0;
+
 function clicarCopo() {
+    const player = jogadores[jogador_atual];
     $copo.removeEventListener('click', clicarCopo);
     $copo.classList.add('tremendo');
     $copo.classList.remove('levantando');
+
     dado = rodarDado()
+    movimento = Math.min(tabuleiro.length-1 - player.posicao, dado)
+    player.posicao += movimento;
+
     $dado.setAttribute('src', `imagens/dado${dado}.png`);
     setTimeout(() => {
         $copo.classList.remove('tremendo');
@@ -180,6 +188,9 @@ function clicarCopo() {
 
     setTimeout(() => {
         $baralho.classList.add('upando');
+        atualizarBarra(player.indice);
+
+        tab3d.prettyWalk(jogador_atual, player.posicao-movimento, player.posicao);
     }, 4000);
 
     setTimeout(() => {
@@ -187,17 +198,13 @@ function clicarCopo() {
     }, 6000);
 }
 
-let dado = 0
-let movimento = 0;
+
 function quiz(){
     $copo.addEventListener('click', clicarCopo);
     $baralho.removeEventListener('click', quiz);
     $baralho.classList.remove('upando');
-    
     const player = jogadores[jogador_atual];
 
-    movimento = Math.min(tabuleiro.length-1 - player.posicao, dado)
-    player.posicao += movimento;
     trocaTela($jogo);
     carta_atual = carta_tema(player.posicao);
     carta_atual == null ? carta_atual = deck_pull() : 0;
@@ -224,6 +231,7 @@ function verifica(chute) {
     }
     if (player.posicao == tabuleiro.length-1) console.log('you win!')
     atualizarBarra(player.indice);
+    tab3d.moveTo(player.indice, player.posicao)
     proximoTurno();
 }
 

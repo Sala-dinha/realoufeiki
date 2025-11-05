@@ -1,7 +1,11 @@
 /* ======= Imports ======= */
 import * as THREE from 'three';
-import { OrbitControls } from 'three/addons/controls/OrbitControls'
+import { OrbitControls } from 'three/addons/controls/OrbitControls';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { OutlinePass } from 'three/addons/postprocessing/OutlinePass.js';
+
 
 /* ======= Scene setup & constants ======= */
 THREE.Cache.enabled = true;
@@ -9,13 +13,18 @@ const $canvas = document.getElementById('tabuleiro');
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera();
 const renderer = new THREE.WebGLRenderer({canvas: $canvas});
+const composer = new EffectComposer(renderer);
 const controls = new OrbitControls(camera, renderer.domElement)
 const clock = new THREE.Clock();
+
+const outlinePass = new OutlinePass( new THREE.Vector2(window.innerWidth, window.innerHeight), scene, camera);
 
 
 /* ======= Event listeners ======= */
 window.addEventListener('resize', () =>{
     renderer.setSize($canvas.clientWidth, $canvas.clientHeight)
+    composer.setSize($canvas.clientWidth, $canvas.clientHeight)
+
 })
 
 /* ======= Scene configuration ======= */
@@ -33,6 +42,14 @@ function setup(){
     // add grid helper
     const gridHelper = new THREE.GridHelper(10, 10);
     scene.add(gridHelper);
+
+    // composer.renderer.outputColorSpace = THREE.SRGBColorSpace;
+    // // composer.addPass(new RenderPass(scene, camera));
+    // // composer.renderTarget1 = renderer.renderTarget1;
+    // outlinePass.edgeStrength = 1.0;
+    // outlinePass.visibleEdgeColor.set('#FFFFFF');
+    // composer.addPass(outlinePass);
+    
 }
 
 /* ======= Model loading ======= */
@@ -46,8 +63,9 @@ function animate() {
         if (m)
         m.update(delta)
     })
-    controls.update()
+    controls.update();
     renderer.render(scene, camera);
+    // composer.render();
     requestAnimationFrame(animate);
 }
 
@@ -88,11 +106,12 @@ let animacoes = [];
 let peoes = [];
 
 /* ======= Initialization ======= */
-export function init(params){
+export async function init(params){
     setup();
     tabuleiro = criarTabuleiro(params.casas, params.temas)
     scene.add(tabuleiro);
-    adicionarPeoes(params.players)
+    await adicionarPeoes(params.players)
+    
     animate();
     setTimeout(() => renderer.setSize($canvas.clientWidth, $canvas.clientHeight), 50)
 }
@@ -119,18 +138,17 @@ window.addEventListener('keydown', (e) => {
     moveTo(3, l++)
 });
 
-function adicionarPeoes(players){
+async function adicionarPeoes(players){
     console.log(players)
     
-    players.forEach((p)=>{
+    await players.forEach(async (p)=>{
         if (p.ativo){
-            loader.load(path_modelo, (gltf) => {
+            const gltf = await loader.loadAsync(path_modelo, () => {})
 
             const peao = gltf.scene;
             const textura = new THREE.TextureLoader().load(p.imagem);
             const mixer = new THREE.AnimationMixer(peao);
-            peao.scale.set(0.25, 0.25, 0.25)
-            peao.position.y += 0.6;
+            
             textura.colorSpace = THREE.SRGBColorSpace
             textura.flipY = false;
             
@@ -150,7 +168,11 @@ function adicionarPeoes(players){
             mixers[p.indice] = mixer;
             peoes[p.indice] = peao;
             scene.add(peao)
-            })
+
+            peao.scale.set(0.25, 0.25, 0.25)
+            peao.position.y += 0.6;
+            moveTo(p.indice, 0, 0)
+            
         }
         else{
             mixers[p.indice] = null;
@@ -159,32 +181,46 @@ function adicionarPeoes(players){
     })
 }
 
-
-// function moveTo(playerindex, goal_x, goal_z){
-//     const peao = peoes[playerindex];
-//     createjs.Tween.get(peao.position)
-//     .to({ x: goal_x, z: goal_z}, 800, createjs.Ease.getPowInOut(2));
-// }
-
-function moveTo(playerindex, numcasa){
+export function moveTo(playerindex, numcasa, t=800){
     const peao = peoes[playerindex];
     const mixer = mixers[playerindex]
     const goal = casas[numcasa].getWorldPosition(new THREE.Vector3())
 
     // posição
     createjs.Tween.get(peao.position)
-    .call(() => {mixer.clipAction(THREE.AnimationClip.findByName(animacoes[0], 'Andar')).play()})
-    .to({ x: goal.x, z: goal.z}, 800, createjs.Ease.getPowInOut(2))
-    .call(() => {mixer.clipAction(THREE.AnimationClip.findByName(animacoes[0], 'Andar')).stop()})
+    // .call(() => {mixer.clipAction(THREE.AnimationClip.findByName(animacoes[0], 'Andar')).play()})
+    .to({ x: goal.x, z: goal.z}, t, createjs.Ease.getPowInOut(2))
+    // .call(() => {mixer.clipAction(THREE.AnimationClip.findByName(animacoes[0], 'Andar')).stop()})
 
     // rodar
-    const previous = casas[(numcasa-1 >= 0) ? numcasa-1 : 0].getWorldPosition(new THREE.Vector3())
+    
+    const previous = casas[Math.max(0, numcasa-1)].getWorldPosition(new THREE.Vector3())
     const a = new THREE.Vector2(-previous.x, previous.z);
     const b = new THREE.Vector2(-goal.x, goal.z);
 
     const angulo = (a.sub(b).angle());
     peao.rotation.y = angulo;
-    console.log(angulo)
+}
 
+export function prettyWalk(playerindex, pos_atual, numcasa, t=800){
+    let i = pos_atual+1;
+    
+    const mixer = mixers[playerindex]
+    mixer.clipAction(THREE.AnimationClip.findByName(animacoes[0], 'Andar')).play()
+    walk(playerindex, i, numcasa)
+    function walk(playerindex, i, numcasa){
+        const peao = peoes[playerindex];
+        const goal = casas[i].getWorldPosition(new THREE.Vector3())
+        createjs.Tween.get(peao.position)
+        .call(() => {
+                const previous = casas[Math.max(0, i-1)].getWorldPosition(new THREE.Vector3())
+                const a = new THREE.Vector2(-previous.x, previous.z);
+                const b = new THREE.Vector2(-goal.x, goal.z);
 
+                const angulo = (a.sub(b).angle());
+                peao.rotation.y = angulo;
+        })
+        .to({ x: goal.x, z: goal.z}, t, createjs.Ease.getPowInOut(2))
+        .call(() => {(++i <= numcasa) ? walk(playerindex, i, numcasa): mixer.clipAction(THREE.AnimationClip.findByName(animacoes[0], 'Andar')).stop()})
+    }
 }
