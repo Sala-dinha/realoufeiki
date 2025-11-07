@@ -18,7 +18,7 @@ let camera_defaultpos;
 // aspect ratio
 // 2*frustrumsizex/2*frustrumsizey
 const camera = new THREE.OrthographicCamera(-frustrumsize*1.6, frustrumsize*1.6, frustrumsize*0.9, -frustrumsize*0.9, -1, 2000);
-const renderer = new THREE.WebGLRenderer({canvas: $canvas, antialias: true});
+export const renderer = new THREE.WebGLRenderer({canvas: $canvas, antialias: true});
 // const controls = new OrbitControls(camera, renderer.domElement)
 const clock = new THREE.Clock();
 
@@ -116,9 +116,6 @@ export async function init(params){
     tabuleiro = criarTabuleiro(params.casas, params.temas)
     scene.add(tabuleiro);
     await adicionarPeoes(params.players)
-    window.addEventListener('resize', () =>{
-        renderer.setSize($canvas.clientWidth, $canvas.clientHeight)
-    })
 
     animate();
     setTimeout(() => renderer.setSize($canvas.clientWidth, $canvas.clientHeight), 50)

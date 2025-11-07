@@ -24,7 +24,7 @@ let jogadores = [
 ];
 let jogadores_ativos = [];
 let jogador_atual = 0;
-const tamanhoTabuleiro = 4;
+const tamanhoTabuleiro = 15;
 const tabuleiro = gerarTabuleiro(tamanhoTabuleiro);
 
 
@@ -41,6 +41,8 @@ const $cartaTexto = document.querySelector('#carta p');
 const $confirmaPersonagens = document.querySelector('#confirma_personagens');
 const $real = document.querySelector('#real');
 const $statusPlayers = document.querySelector('#status_players');
+const $canvas = document.getElementById('tabuleiro');
+
 
 // telas
 let $tela_atual = null;
@@ -53,7 +55,14 @@ const $podio = document.getElementById('tela_podio');
 /* ======= Utility functions ======= */
 
 function trocaTela(telaDestino){
-    
+    if (telaDestino != $tabuleiro){
+        window.removeEventListener('resize', () =>{
+        tab3d.renderer.setSize($canvas.clientWidth, $canvas.clientHeight)
+    })}
+    else{
+        window.addEventListener('resize', () =>{
+        tab3d.renderer.setSize($canvas.clientWidth, $canvas.clientHeight)})
+    }
     $copo.classList.remove('levantando');
     if ($tela_atual) {
         $tela_atual.style.display = 'none';
@@ -248,12 +257,14 @@ function finalizarJogo(){
     $vencedor.querySelector('img').setAttribute('src', jogadores[jogador_atual].imagem);
 
     const $dado = document.querySelector('#top_dado')
-    const rolador = jogadores.filter(j => j.ativo == true).reduce((max, obj) => {(obj.dados/obj.turnos > max.dados/max.turnos) ? obj : max})
+    const rolador = jogadores
+                    .filter(j => j.ativo == true)
+                    .reduce((max, obj) => {return(obj.dados/obj.turnos > max.dados/max.turnos) ? obj : max})
     $dado.querySelector('p').innerText = rolador.personagem;
     $dado.querySelector('img').setAttribute('src', rolador.imagem);
 
     const $chute = document.querySelector('#top_chute')
-    const chutador = jogadores.filter(j => j.ativo == true).reduce((max, obj) => {(obj.acertos/obj.turnos > max.acertos/max.turnos) ? obj : max})
+    const chutador = jogadores.filter(j => j.ativo == true).reduce((max, obj) => {return (obj.acertos/obj.turnos > max.acertos/max.turnos) ? obj : max})
     console.log(chutador)
     $chute.querySelector('p').innerText = chutador.personagem;
     $chute.querySelector('img').setAttribute('src', chutador.imagem);
