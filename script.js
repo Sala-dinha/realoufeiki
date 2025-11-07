@@ -223,16 +223,36 @@ function atualizarBarra(jogador) {
 function verifica(chute) {
     const player = jogadores[jogador_atual];
     if (carta_atual.real === chute) {
+        // acerto
+        anuncia(true)
         rato_firula();
         player.score++;
     }
     else {
+        //erro
+        anuncia(false)
         player.posicao -= movimento;
     }
     if (player.posicao == tabuleiro.length-1) console.log('you win!')
     atualizarBarra(player.indice);
     tab3d.moveTo(player.indice, player.posicao)
     proximoTurno();
+}
+
+import textos from './textos.json' with {type: 'json'}
+
+function anuncia(acertou){
+    const elemento = document.createElement('p')
+    let i = Math.floor(Math.random()*5)
+    if (acertou){
+        elemento.innerText = textos.acerto[i];
+    }
+    else{
+        elemento.innerText = textos.erro[i];
+    }
+    elemento.classList.add('anuncio')
+    document.body.appendChild(elemento);
+    setTimeout(() => {document.body.removeChild(elemento)}, 1900)
 }
 
 function proximoTurno(){

@@ -73,6 +73,25 @@ body, html {
   width: 0%;
 }
 
+.anuncio{
+  z-index: 5;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  translate: -50%;
+  font-size: xx-large;
+  text-align: center;
+  font-family: "Comic Sans MS", "Comic Sans", cursive;
+  font-weight: bold;
+  text-shadow: black 0px 0px 10px;
+  animation: cair 2s;
+}
+
+@keyframes cair {
+  50% {scale: 200%; opacity: 100%;}
+  100% {opacity: 0%;}
+}
+
 .barra p{
   position:relative;
   bottom: -1rem;
