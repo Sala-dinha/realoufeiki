@@ -119,10 +119,7 @@ export async function init(params){
     window.addEventListener('resize', () =>{
         renderer.setSize($canvas.clientWidth, $canvas.clientHeight)
     })
-    window.addEventListener('click', () =>{
-        console.log(camera.position)
-    })
-    
+
     animate();
     setTimeout(() => renderer.setSize($canvas.clientWidth, $canvas.clientHeight), 50)
 }

@@ -17,14 +17,14 @@ let perfis = ['','','',''];
 const animacao = {}
 let carta_atual = {tema: '', texto: '', real: false};
 let jogadores = [
-    {personagem: '', score: 0, ativo: false, posicao: 0, indice: 0, cor: '#FF0000', imagem: ''},
-    {personagem: '', score: 0, ativo: false, posicao: 0, indice: 1, cor: '#0000FF', imagem: ''},
-    {personagem: '', score: 0, ativo: false, posicao: 0, indice: 2, cor: '#FF82A9', imagem: ''},
-    {personagem: '', score: 0, ativo: false, posicao: 0, indice: 3, cor: '#FFFF00', imagem: ''}
+    {ativo: false, personagem: '', turnos: 0, acertos: 0, dados: 0, posicao: 0, indice: 0, cor: '#FF0000', imagem: ''},
+    {ativo: false, personagem: '', turnos: 0, acertos: 0, dados: 0, posicao: 0, indice: 1, cor: '#0000FF', imagem: ''},
+    {ativo: false, personagem: '', turnos: 0, acertos: 0, dados: 0, posicao: 0, indice: 2, cor: '#FF82A9', imagem: ''},
+    {ativo: false, personagem: '', turnos: 0, acertos: 0, dados: 0, posicao: 0, indice: 3, cor: '#FFFF00', imagem: ''}
 ];
 let jogadores_ativos = [];
 let jogador_atual = 0;
-const tamanhoTabuleiro = 25;
+const tamanhoTabuleiro = 4;
 const tabuleiro = gerarTabuleiro(tamanhoTabuleiro);
 
 
@@ -176,8 +176,8 @@ function clicarCopo() {
     $copo.removeEventListener('click', clicarCopo);
     $copo.classList.add('tremendo');
     $copo.classList.remove('levantando');
-
     dado = rodarDado()
+    player.dados += dado;
     movimento = Math.min(tabuleiro.length-1 - player.posicao, dado)
     player.posicao += movimento;
 
@@ -223,21 +223,44 @@ function atualizarBarra(jogador) {
 
 function verifica(chute) {
     const player = jogadores[jogador_atual];
+    player.turnos+=1;
     if (carta_atual.real === chute) {
         // acerto
         anuncia(true)
         rato_firula();
-        player.score++;
+        player.acertos++;
     }
     else {
         //erro
         anuncia(false)
         player.posicao -= movimento;
     }
-    if (player.posicao == tabuleiro.length-1) console.log('you win!')
     atualizarBarra(player.indice);
+    if (player.posicao == tabuleiro.length-1) {finalizarJogo(); return;}
     tab3d.moveTo(player.indice, player.posicao)
     proximoTurno();
+}
+
+function finalizarJogo(){
+    // pegar os tops
+    const $vencedor = document.querySelector('#top_player')
+    $vencedor.querySelector('p').innerText = jogadores[jogador_atual].personagem;
+    $vencedor.querySelector('img').setAttribute('src', jogadores[jogador_atual].imagem);
+
+    const $dado = document.querySelector('#top_dado')
+    const rolador = jogadores.filter(j => j.ativo).reduce((max, obj) => {(obj.dados/obj.turnos > max.dados/max.turnos) ? obj : max})
+    $dado.querySelector('p').innerText = rolador.personagem;
+    $dado.querySelector('img').setAttribute('src', rolador.imagem);
+
+    const $chute = document.querySelector('#top_chute')
+    const chutador = jogadores.filter(j => j.ativo).reduce((max, obj) => {(obj.acertos/obj.turnos > max.acertos/max.turnos) ? obj : max})
+    $chute.querySelector('p').innerText = chutador.personagem;
+    $chute.querySelector('img').setAttribute('src', chutador.imagem);
+
+
+
+    //tocar audio do vencedor
+    trocaTela($podio);
 }
 
 import textos from './textos.json' with {type: 'json'}
