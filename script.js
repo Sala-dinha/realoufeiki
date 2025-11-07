@@ -4,13 +4,14 @@ import * as tab3d from './tabuleiro.js'
 
 /* ======= Constants & state ======= */
 const TEMAS = [
-    {tema: 'politica',      cor:0x0000ff, imagem: ''},
-    {tema: 'podcasts',      cor:0x00ffff, imagem: ''},
-    {tema: 'politiquetes',  cor:0xff00ff, imagem: ''},
-    {tema: 'celebretes',    cor:0xffff00, imagem: ''},
-    {tema: 'davy jones',    cor:0xffffff, imagem: ''},
-    {tema: 'alanzoka',      cor:0xff0000, imagem: ''}
+    {tema: 'politica',      cor: 0x1F4E79, imagem: ''}, // azul petróleo
+    {tema: 'podcasts',      cor: 0x4CAF50, imagem: ''}, // verde musgo
+    {tema: 'politiquetes',  cor: 0xFF7043, imagem: ''}, // laranja queimado
+    {tema: 'celebretes',    cor: 0x9575CD, imagem: ''}, // roxo suave
+    {tema: 'davy jones',    cor: 0xFFF176, imagem: ''}, // amarelo pastel
+    {tema: 'alanzoka',      cor: 0xE53935, imagem: ''}  // vermelho cereja
 ];
+
 
 let perfis = ['','','',''];
 const animacao = {}
@@ -23,7 +24,7 @@ let jogadores = [
 ];
 let jogadores_ativos = [];
 let jogador_atual = 0;
-const tamanhoTabuleiro = 10;
+const tamanhoTabuleiro = 25;
 const tabuleiro = gerarTabuleiro(tamanhoTabuleiro);
 
 

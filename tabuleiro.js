@@ -11,34 +11,38 @@ import { OutlinePass } from 'three/addons/postprocessing/OutlinePass.js';
 THREE.Cache.enabled = true;
 const $canvas = document.getElementById('tabuleiro');
 const scene = new THREE.Scene();
-const camera = new THREE.OrthographicCamera();
+
+const frustrumsize = 5;
+let camera_defaultpos;
+
+// aspect ratio
+// 2*frustrumsizex/2*frustrumsizey
+const camera = new THREE.OrthographicCamera(-frustrumsize*1.6, frustrumsize*1.6, frustrumsize*0.9, -frustrumsize*0.9, -1, 2000);
 const renderer = new THREE.WebGLRenderer({canvas: $canvas, antialias: true});
-const controls = new OrbitControls(camera, renderer.domElement)
+// const controls = new OrbitControls(camera, renderer.domElement)
 const clock = new THREE.Clock();
 
 
 /* ======= Event listeners ======= */
-window.addEventListener('resize', () =>{
-    camera.aspect = $canvas.clientWidth / $canvas.clientHeight
-    renderer.setSize($canvas.clientWidth, $canvas.clientHeight)
-})
+
 
 /* ======= Scene configuration ======= */
 function setup(){
-    camera.position.set(0, 2, 5);
-
+    camera.position.set(5.3, 3.10, 5.3);
+    camera_defaultpos = camera.position.clone();
+    camera.lookAt(scene.position)
     // Lighting
-    const ambientLight = new THREE.AmbientLight();
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
     scene.add(ambientLight);
 
-    createjs.Ticker.setFPS(60);
-    // const directionalLight = new THREE.DirectionalLight(0xffffff);
-    // directionalLight.position.set(5, 10, 7.5);
-    // scene.add(directionalLight);
+    createjs.Ticker.framerate = 60;
+    const directionalLight = new THREE.DirectionalLight(0xffffff);
+    directionalLight.position.set(5, 10, 7.5);
+    scene.add(directionalLight);
 
     // add grid helper
-    const gridHelper = new THREE.GridHelper(10, 10);
-    scene.add(gridHelper);
+    // const gridHelper = new THREE.GridHelper(10, 10);
+    // scene.add(gridHelper);
 
     
 }
@@ -54,10 +58,12 @@ function animate() {
         if (m)
         m.update(delta)
     })
-    controls.update();
+    
     renderer.render(scene, camera);
     requestAnimationFrame(animate);
 }
+
+
 
 /* ======= Board creation & utilities ======= */
 function posicaoTabuleiro(n, l, tamanhoCasa = 1, gapcasa = 0){
@@ -83,9 +89,18 @@ function criarTabuleiro(pcasas, temas, tamanhoLinha = 5){
         });
         const square = new THREE.Mesh(geometry, material);
         square.position.set(pos[0]*(tamanhoCasa + gapCasa), 0, pos[1]*(tamanhoCasa + gapCasa));
+
         casas.push(square)
         tabuleiro.add(square);
     }
+    const points = [];
+    for (const c of casas){
+        points.push(c.position);
+    }
+    const geometry = new THREE.BufferGeometry().setFromPoints( points );
+    const line = new THREE.Line(geometry, new THREE.LineBasicMaterial());
+    tabuleiro.add(line);
+
     tabuleiro.position.set(-(((tamanhoLinha * (tamanhoCasa + gapCasa)) - 3*gapCasa) / 2), 0, -(((numeroCasas/tamanhoLinha * (tamanhoCasa + gapCasa)) - 3*gapCasa) / 2));
     return tabuleiro;
 }
@@ -101,32 +116,18 @@ export async function init(params){
     tabuleiro = criarTabuleiro(params.casas, params.temas)
     scene.add(tabuleiro);
     await adicionarPeoes(params.players)
+    window.addEventListener('resize', () =>{
+        renderer.setSize($canvas.clientWidth, $canvas.clientHeight)
+    })
+    window.addEventListener('click', () =>{
+        console.log(camera.position)
+    })
     
     animate();
     setTimeout(() => renderer.setSize($canvas.clientWidth, $canvas.clientHeight), 50)
 }
 
 /* ======= Debug & testing ======= */
-let i = 0;
-window.addEventListener('keydown', (e) => {
-    if (e.key != 'i') return;
-    moveTo(0, i++)
-});
-let j = 0;
-window.addEventListener('keydown', (e) => {
-    if (e.key != 'j') return;
-    moveTo(1, j++)
-});
-let k = 0;
-window.addEventListener('keydown', (e) => {
-    if (e.key != 'k') return;
-    moveTo(2, k++)
-});
-let l = 0;
-window.addEventListener('keydown', (e) => {
-    if (e.key != 'l') return;
-    moveTo(3, l++)
-});
 
 async function adicionarPeoes(players){
     console.log(players)
@@ -197,6 +198,7 @@ export function moveTo(playerindex, numcasa, t=800){
 export function prettyWalk(playerindex, pos_atual, numcasa, t=800){
     let i = pos_atual+1;
     
+    
     const mixer = mixers[playerindex]
     mixer.clipAction(THREE.AnimationClip.findByName(animacoes[0], 'Andar')).play()
     walk(playerindex, i, numcasa)
@@ -213,6 +215,18 @@ export function prettyWalk(playerindex, pos_atual, numcasa, t=800){
                 peao.rotation.y = angulo;
         })
         .to({ x: goal.x, z: goal.z}, t, createjs.Ease.getPowInOut(2))
-        .call(() => {(++i <= numcasa) ? walk(playerindex, i, numcasa): mixer.clipAction(THREE.AnimationClip.findByName(animacoes[0], 'Andar')).stop()})
+        .call(() => {(++i <= numcasa) ? walk(playerindex, i, numcasa): mixer.clipAction(THREE.AnimationClip.findByName(animacoes[0], 'Andar')).stop(); camera.position.copy(camera_defaultpos);})
     }
+}
+
+
+function frustrumscale(n){
+    const sizex = (frustrumsize*1.6)
+    const sizey = (frustrumsize*0.9)
+    camera.left= sizex * -n
+    camera.right= sizex * n
+    camera.top= sizey * n
+    camera.bottom= sizey * -n
+    camera.updateProjectionMatrix();
+
 }

@@ -280,6 +280,7 @@ body{
         transform: translateY(-60%) scaleY(40%);
     }
     h1{
+        text-shadow: black 0px 0px 5px;
         width: fit-content;
         animation: wobble 1s ease-in-out infinite alternate;
         padding-top: 2rem;
@@ -408,5 +409,5 @@ body{
 #tabuleiro{
   z-index: 0;
   aspect-ratio: calc(16/9);
-  height: 60vh;
+  height: 70vh;
 }
