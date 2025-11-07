@@ -11,20 +11,16 @@ import { OutlinePass } from 'three/addons/postprocessing/OutlinePass.js';
 THREE.Cache.enabled = true;
 const $canvas = document.getElementById('tabuleiro');
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera();
-const renderer = new THREE.WebGLRenderer({canvas: $canvas});
-const composer = new EffectComposer(renderer);
+const camera = new THREE.OrthographicCamera();
+const renderer = new THREE.WebGLRenderer({canvas: $canvas, antialias: true});
 const controls = new OrbitControls(camera, renderer.domElement)
 const clock = new THREE.Clock();
-
-const outlinePass = new OutlinePass( new THREE.Vector2(window.innerWidth, window.innerHeight), scene, camera);
 
 
 /* ======= Event listeners ======= */
 window.addEventListener('resize', () =>{
+    camera.aspect = $canvas.clientWidth / $canvas.clientHeight
     renderer.setSize($canvas.clientWidth, $canvas.clientHeight)
-    composer.setSize($canvas.clientWidth, $canvas.clientHeight)
-
 })
 
 /* ======= Scene configuration ======= */
@@ -32,23 +28,18 @@ function setup(){
     camera.position.set(0, 2, 5);
 
     // Lighting
-    const ambientLight = new THREE.AmbientLight(0x404040);
+    const ambientLight = new THREE.AmbientLight();
     scene.add(ambientLight);
 
-    const directionalLight = new THREE.DirectionalLight(0xffffff);
-    directionalLight.position.set(5, 10, 7.5);
-    scene.add(directionalLight);
+    createjs.Ticker.setFPS(60);
+    // const directionalLight = new THREE.DirectionalLight(0xffffff);
+    // directionalLight.position.set(5, 10, 7.5);
+    // scene.add(directionalLight);
 
     // add grid helper
     const gridHelper = new THREE.GridHelper(10, 10);
     scene.add(gridHelper);
 
-    // composer.renderer.outputColorSpace = THREE.SRGBColorSpace;
-    // // composer.addPass(new RenderPass(scene, camera));
-    // // composer.renderTarget1 = renderer.renderTarget1;
-    // outlinePass.edgeStrength = 1.0;
-    // outlinePass.visibleEdgeColor.set('#FFFFFF');
-    // composer.addPass(outlinePass);
     
 }
 
@@ -65,7 +56,6 @@ function animate() {
     })
     controls.update();
     renderer.render(scene, camera);
-    // composer.render();
     requestAnimationFrame(animate);
 }
 
@@ -141,7 +131,7 @@ window.addEventListener('keydown', (e) => {
 async function adicionarPeoes(players){
     console.log(players)
     
-    await players.forEach(async (p)=>{
+    for(const p of players){
         if (p.ativo){
             const gltf = await loader.loadAsync(path_modelo, () => {})
 
@@ -170,7 +160,9 @@ async function adicionarPeoes(players){
             scene.add(peao)
 
             peao.scale.set(0.25, 0.25, 0.25)
-            peao.position.y += 0.6;
+            peao.position.copy(casas[0].getWorldPosition(new THREE.Vector3()));
+
+            peao.position.y = 0.7;
             moveTo(p.indice, 0, 0)
             
         }
@@ -178,7 +170,7 @@ async function adicionarPeoes(players){
             mixers[p.indice] = null;
             peoes[p.indice] = null;
         }
-    })
+    }
 }
 
 export function moveTo(playerindex, numcasa, t=800){
